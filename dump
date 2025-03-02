@@ -1,0 +1,241 @@
+
+<script>
+    // $(document).ready(function() {
+    //     var now = new Date();
+    //     var today = now.toISOString().split('T')[0];
+
+    //     var calendarEl = document.getElementById('calendar');
+    //     var calendar = new FullCalendar.Calendar(calendarEl, {
+    //         initialView: 'timeGridWeek',
+    //         slotMinTime: "08:00:00",
+    //         slotMaxTime: "24:00:00",
+    //         allDaySlot: false,
+    //         editable: false,
+    //         selectable: true,
+    //         eventOverlap: false,
+    //         selectOverlap: false,
+    //         aspectRatio: 1.8,
+    //         height: 'auto',
+    //         selectMirror: true,
+    //         events: "fetch_schedules.php",
+
+    //         validRange: { start: now },
+
+    //         selectAllow: function(selectInfo) {
+    //             return new Date(selectInfo.start) >= now;
+    //         },
+
+    //         eventDidMount: function(info) {
+    //             $(info.el).tooltip({
+    //                 title: "Teacher: " + info.event.extendedProps.name,
+    //                 placement: "top",
+    //                 trigger: "hover",
+    //                 container: "body"
+    //             });
+    //         },
+
+    //         select: function(info) {
+    //             $('#scheduleStart').val(info.startStr);
+    //             $('#scheduleEnd').val(info.endStr);
+    //             $('#scheduleDate').val(info.startStr.split("T")[0]);
+    //             $('#addScheduleModal').modal('show');
+    //         },
+
+    //         eventDrop: function(info) { updateEvent(info); },
+    //         eventResize: function(info) { updateEvent(info); },
+
+    //         eventClick: function(info) {
+    //             $.ajax({
+    //                 type: "POST",
+    //                 url: "get_sched.php",
+    //                 data: { id: info.event.id },
+    //                 dataType: "json",
+    //                 success: function(response) {
+    //                     if (response.status === "success") {
+    //                         $('#editScheduleId').val(response.data.id);
+    //                         $('#editScheduleTitle').val(response.data.title);
+    //                         $('#editScheduleSection').val(response.data.section);
+    //                         $('#editScheduleSubject').val(response.data.subject);
+    //                         $('#editScheduleDate').val(response.data.date);
+    //                         $('#editScheduleStart').val(response.data.start);
+    //                         $('#editScheduleEnd').val(response.data.end);
+    //                         $('#editScheduleModal').modal('show');
+    //                     } else {
+    //                         alertify.error(response.message || "Unauthorized access!");
+    //                     }
+    //                 },
+    //                 error: function(xhr, status, error) {
+    //                     console.error("AJAX Error:", error);
+    //                     alertify.error("Something went wrong while fetching data.");
+    //                 }
+    //             });
+    //         }
+    //     });
+
+    //     calendar.render();
+    // });
+
+
+
+    $(document).ready(function() {
+        var now = new Date();
+        var today = now.toISOString().split('T')[0];
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            slotMinTime: "08:00:00",
+            slotMaxTime: "24:00:00",
+            allDaySlot: false,
+            editable: false, 
+            selectable: true,
+            eventOverlap: false,
+            selectOverlap: false,
+            aspectRatio: 1.8,
+            height: 'auto',
+            selectMirror: true,
+            events: "fetch_schedules.php",
+
+            validRange: {
+                start: now
+            },
+
+            selectAllow: function(selectInfo) {
+                return new Date(selectInfo.start) >= now;
+            },
+
+            eventDidMount: function(info) {
+                $(info.el).tooltip({
+                    title: "Teacher: " + info.event.extendedProps.name,
+                    placement: "top",
+                    trigger: "hover",
+                    container: "body"
+                });
+            },
+
+            select: function(info) {
+                $('#scheduleStart').val(info.startStr);
+                $('#scheduleEnd').val(info.endStr);
+                $('#scheduleDate').val(info.startStr.split("T")[0]);
+                $('#addScheduleModal').modal('show');
+            },
+
+            eventDrop: function(info) {
+                updateEvent(info);
+            },
+
+            eventResize: function(info) {
+                updateEvent(info);
+            },
+
+            eventClick: function(info) {
+                $.ajax({
+                    type: "POST",
+                    url: "get_sched.php",
+                    data: {
+                        id: info.event.id
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === "success") {
+                            $('#editScheduleId').val(response.data.id);
+                            $('#editScheduleTitle').val(response.data.title);
+                            $('#editScheduleSection').val(response.data.section);
+                            $('#editScheduleSubject').val(response.data.subject);
+                            $('#editScheduleDate').val(response.data.date);
+                            $('#editScheduleStart').val(response.data.start);
+                            $('#editScheduleEnd').val(response.data.end);
+                            $('#editScheduleModal').modal('show');
+                        } else {
+                            alertify.error(response.message || "Unauthorized access!");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", error);
+                        alertify.error("Something went wrong while fetching data.");
+                    }
+                });
+            }
+        });
+
+        calendar.render();
+
+        $('#saveScheduleBtn').click(function() {
+            var title = $('#scheduleTitle').val();
+            var section = $('#scheduleSection').val();
+            var subject = $('#scheduleSubject').val();
+            var date = $('#scheduleDate').val();
+            var start = $('#scheduleStart').val();
+            var end = $('#scheduleEnd').val();
+            var user_id = document.getElementById('auth_user') ? document.getElementById('auth_user').value : null;
+
+            if (!user_id) {
+                alertify.error("User ID not found!");
+                return;
+            }
+
+            if (title && section && subject) {
+                $.ajax({
+                    url: "code.php",
+                    type: "POST",
+                    data: {
+                        action: "add_schedule",
+                        title: title,
+                        section: section,
+                        subject: subject,
+                        date: date,
+                        start: start,
+                        end: end,
+                        user_id: user_id
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === "success") {
+                            $('#addScheduleModal').modal('hide');
+                            calendar.refetchEvents();
+                            alertify.success(response.message);
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            alertify.error(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alertify.error("Failed to add schedule.");
+                    }
+                });
+            } else {
+                alertify.error("All fields are required!");
+            }
+        });
+
+        function updateEvent(info) {
+            var event = info.event;
+            $.ajax({
+                url: "code.php",
+                type: "POST",
+                data: {
+                    action: "update_schedule",
+                    id: event.id,
+                    start: event.start.toISOString(),
+                    end: event.end ? event.end.toISOString() : null
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.status === "success") {
+                        alertify.success(response.message);
+                    } else {
+                        alertify.error(response.message);
+                        info.revert(); 
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    alertify.error("Failed to update event.");
+                    info.revert();
+                }
+            });
+        }
+    });
+</script>

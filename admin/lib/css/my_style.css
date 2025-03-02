@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600;700&display=swap');
+:root {
+  --first-color: #77151C !important;
+  --text-color: #ececec !important;
+  --section: #e4e4e45a !important;
+  --body-color: #ffffff !important;
+  --body-font: 'Poppins', sans-serif;
+}
+/* <--------GLOBAL ELEMENT--------> */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #303030;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  section {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  /* ALL TEXT DESIGN */
+    h2 {
+      font-size: 50px;
+      font-weight: 600;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+    span {
+      color: var(--first-color) !important;
+    }
+    a {
+      text-decoration: none !important;
+    }
+  /* ALL TEXT DESIGN */
+/* <--------GLOBAL ELEMENT--------> */
+
+#uploadedImage{
+  display:none; 
+  border-radius: 3% !important;
+}
+
+
+/* <--------ALL ANIMATIONS--------> */
+  @keyframes pulse {
+    0% {
+      border-color: rgba(0, 123, 255, 0.5); 
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); 
+    }
+    50% {
+      border-color: rgba(0, 123, 255, 0);
+      box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); 
+    }
+    100% {
+      border-color: rgba(0, 123, 255, 0.5);
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); 
+    }
+  }
+  @keyframes bounceDownIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    60% {
+      transform: translateY(10%);
+    }
+    80% {
+      transform: translateY(-5%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .shake-animation {
+    animation: shake 0.3s ease-in-out infinite alternate;
+  }
+  @keyframes shake {
+    from {
+      transform: rotate(-10deg);
+    }
+    to {
+      transform: rotate(10deg);
+    }
+  }
+  .modal {
+    animation: bounceDownIn 0.5s;
+  }
+/* <--------ALL ANIMATIONS--------> */
+
+/* <--------RESPONSIVE VIEW --------> */
+  @media(max-width: 820px) {
+    .row {
+      flex-direction: column;
+    }
+  }
+  /* MOBILE VIEW */
+  @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 600px) {
+
+    .all_responsive_img{
+      width: 350px !important;
+      margin-bottom: 10% !important;
+      margin-left: 7% !important;
+    }
+  }
+/* <--------RESPONSIVE VIEW --------> */
