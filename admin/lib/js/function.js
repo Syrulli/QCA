@@ -53,7 +53,7 @@ $(document).on('click', '.approve_item_btn', function (e) {
             swal('Success!', response.message, 'success').then(() => {
               setTimeout(() => {
                 location.reload();
-              }, 2000);
+              }, 2000); // reload
             });
           } else {
             swal('Error!', response.message, 'error');
