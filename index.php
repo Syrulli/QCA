@@ -53,7 +53,7 @@ include('email.php');
                 $items = getAllAvailableItems("tbl_items");
                 if (mysqli_num_rows($items) > 0) {
                   foreach ($items as $data) {
-                    echo '<option value="' . htmlspecialchars($data['item_name']) . '" data-stock="' . intval($data['stock']) . '">' . htmlspecialchars($data['item_name']) . '</option>';
+                    echo '<option value="' . intval($data['id']) . '" data-stock="' . intval($data['stock']) . '">' . htmlspecialchars($data['item_name']) . '</option>';
                   }
                 } else {
                   echo '<option disabled>No Items Available</option>';

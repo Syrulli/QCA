@@ -23,32 +23,30 @@
                 </tr>
             </thead>
             <tbody>
-
-            <?php
-                $items = getAllItems("tbl_items");
-                if (mysqli_num_rows($items) > 0) {
-                    foreach ($items as $data) {
+                <?php
+                    $items = getAllItems("tbl_items");
+                    if (mysqli_num_rows($items) > 0) {
+                        foreach ($items as $data) {
+                            ?>
+                                <tr>
+                                    <td><small><?= $data['item_name']; ?></small></td>
+                                    <td><small><?= $data['stock']; ?></small></td>
+                                    <td>
+                                        <img style="width: 30px; height: 30px; border-radius: 30%;" src="../uploaded/<?= $data['image']; ?>">
+                                    </td>
+                                    <td>
+                                        <a href="edit_item.php?id=<?= $data['id']; ?>" type="button" class="me-2 text-secondary" title="Edit Tagged Tools"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a type="button" value="<?= $data['id']; ?>" class="delete_item_btn me-2" title="Delete Tagged Tools"><i class="fa-solid fa-trash" style="color: red;"></i></a>
+                                    </td>
+                                </tr>
+                            <?php
+                        }
+                    }else{
                         ?>
-                            <tr>
-                                <td><small><?= $data['item_name']; ?></small></td>
-                                <td><small><?= $data['stock']; ?></small></td>
-                                <td>
-                                    <img style="width: 30px; height: 30px; border-radius: 30%;" src="../uploaded/<?= $data['image']; ?>">
-                                </td>
-                                <td>
-                                    <a href="edit_item.php?id=<?= $data['id']; ?>" type="button" class="me-2 text-secondary" title="Edit Tagged Tools"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a type="button" value="<?= $data['id']; ?>" class="delete_item_btn me-2" title="Delete Tagged Tools"><i class="fa-solid fa-trash" style="color: red;"></i></a>
-                                </td>
-                            </tr>
+                            <tr><td colspan="6">No Tagged Tools found</td></tr>
                         <?php
                     }
-                }else{
-                    ?>
-                        <tr><td colspan="6">No Tagged Tools found</td></tr>
-                    <?php
-                }
-            ?>
-              
+                ?>
             </tbody>
         </table>
     </div>

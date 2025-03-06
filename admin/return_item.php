@@ -1,8 +1,11 @@
 <?php
+header('Content-Type: application/json'); // Ensure JSON response
+session_start(); // Ensure session is started
 include '../config/dbcon.php'; 
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-    $borrow_id = intval($_GET['id']); 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $borrow_id = intval($_POST['id']);
+    $approved_by = $_SESSION['auth_user']['user_id']; // Get the logged-in user's ID
 
     // Fetch borrowed item details
     $query = "SELECT * FROM tbl_borrowed_items WHERE id = ?";
@@ -20,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         $item_id = intval($row['item_name']); 
         $qty = intval($row['qty']);
 
+        // Fetch item stock
         $stockQuery = "SELECT stock FROM tbl_items WHERE id = ?";
         $stockStmt = mysqli_prepare($con, $stockQuery);
         mysqli_stmt_bind_param($stockStmt, "i", $item_id);
@@ -29,43 +33,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         if ($stockResult && mysqli_num_rows($stockResult) > 0) {
             $stockRow = mysqli_fetch_assoc($stockResult);
             $current_stock = intval($stockRow['stock']);
-
             $new_stock = $current_stock + $qty;
+
+            // Update stock
             $updateStockQuery = "UPDATE tbl_items SET stock = ? WHERE id = ?";
             $updateStockStmt = mysqli_prepare($con, $updateStockQuery);
             mysqli_stmt_bind_param($updateStockStmt, "ii", $new_stock, $item_id);
             
             if (mysqli_stmt_execute($updateStockStmt)) {
-                $insertHistoryQuery = "INSERT INTO tbl_borrowed_history (student_name, section, borrowed_date, return_date, item_name, qty) 
-                                       VALUES (?, ?, ?, ?, ?, ?)";
+                // Insert into history with approved_by
+                $insertHistoryQuery = "INSERT INTO tbl_borrowed_history (student_name, section, borrowed_date, return_date, item_name, qty, approved_by) 
+                                       VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $historyStmt = mysqli_prepare($con, $insertHistoryQuery);
-                mysqli_stmt_bind_param($historyStmt, "ssssii", $student_name, $section, $borrowed_date, $return_date, $item_id, $qty);
+                mysqli_stmt_bind_param($historyStmt, "ssssiii", $student_name, $section, $borrowed_date, $return_date, $item_id, $qty, $approved_by);
 
                 if (mysqli_stmt_execute($historyStmt)) {
+                    // Delete from borrowed items
                     $deleteQuery = "DELETE FROM tbl_borrowed_items WHERE id = ?";
                     $deleteStmt = mysqli_prepare($con, $deleteQuery);
                     mysqli_stmt_bind_param($deleteStmt, "i", $borrow_id);
 
                     if (mysqli_stmt_execute($deleteStmt)) {
-                        echo json_encode(["status" => "success", "message" => "Item returned successfully!"]);
+                        echo json_encode(["status" => "success", "message" => "Item approved and returned successfully!"]);
+                        exit;
                     } else {
-                        echo json_encode(['success' => false, 'message' => 'Error deleting borrowed record.']);
+                        echo json_encode(["status" => "error", "message" => "Error deleting borrowed record."]);
+                        exit;
                     }
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Error moving record to history.']);
+                    echo json_encode(["status" => "error", "message" => "Error moving record to history."]);
+                    exit;
                 }
             } else {
-                echo json_encode(['success' => false, 'message' => 'Error updating stock.']);
+                echo json_encode(["status" => "error", "message" => "Error updating stock."]);
+                exit;
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Item not found in stock.']);
+            echo json_encode(["status" => "error", "message" => "Item not found in stock."]);
+            exit;
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Borrowed item not found.']);
+        echo json_encode(["status" => "error", "message" => "Borrowed item not found."]);
+        exit;
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+    echo json_encode(["status" => "error", "message" => "Invalid request."]);
+    exit;
 }
+
 
 mysqli_close($con);
 ?>

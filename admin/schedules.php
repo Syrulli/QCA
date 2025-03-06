@@ -22,7 +22,6 @@ include('components/modal.php');
     document.addEventListener("DOMContentLoaded", function() {
         var today = new Date().toISOString().split('T')[0];
 
-        // Set the minimum date to today
         document.getElementById("editScheduleDate").setAttribute("min", today);
 
         function updateDateTimeMin() {
@@ -31,23 +30,19 @@ include('components/modal.php');
             var endTime = document.getElementById("editScheduleEnd");
 
             var now = new Date();
-            var currentDateTime = now.toISOString().slice(0, 16); // Format YYYY-MM-DDTHH:MM
+            var currentDateTime = now.toISOString().slice(0, 16); 
 
             if (selectedDate === today) {
-                // Prevent selecting past times for today
                 startTime.setAttribute("min", currentDateTime);
             } else {
-                // Allow any time for future dates
                 startTime.removeAttribute("min");
             }
 
-            // Ensure end time is always after the start time
             startTime.addEventListener("change", function() {
                 endTime.setAttribute("min", startTime.value);
             });
         }
 
-        // Update min values when the date is changed
         document.getElementById("editScheduleDate").addEventListener("change", updateDateTimeMin);
     });
 </script>
@@ -217,47 +212,6 @@ include('components/modal.php');
 </script>
 
 <script>
-    // $(document).ready(function() {
-    //     $("#deleteScheduleBtn").click(function() {
-    //         var scheduleId = $("#editScheduleId").val();
-
-    //         if (scheduleId) {
-    //             alertify.confirm("Confirm Delete", "Are you sure you want to delete this schedule?",
-    //                 function() {
-    //                     $.ajax({
-    //                         url: "code.php",
-    //                         type: "POST",
-    //                         data: {
-    //                             delete_schedule: true,
-    //                             id: scheduleId
-    //                         },
-    //                         dataType: "json",
-    //                         success: function(response) {
-    //                             if (response.status === "success") {
-    //                                 alertify.success(response.message);
-    //                                 $("#editScheduleModal").modal("hide");
-    //                                 setTimeout(function() {
-    //                                     location.reload();
-    //                                 }, 1000);
-    //                             } else {
-    //                                 alertify.error(response.message);
-    //                             }
-    //                         },
-    //                         error: function() {
-    //                             alertify.error("Failed to delete schedule.");
-    //                         }
-    //                     });
-    //                 },
-    //                 function() {
-    //                     alertify.error("Delete canceled.");
-    //                 }
-    //             );
-    //         } else {
-    //             alertify.error("No schedule selected.");
-    //         }
-    //     });
-    // });
-
     $(document).on('click', '#deleteScheduleBtn', function(e) {
         e.preventDefault();
         var schedTableId = $('#editScheduleId').val();

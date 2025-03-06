@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2025 at 04:00 PM
+-- Generation Time: Mar 06, 2025 at 04:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,18 +24,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_borrower`
+-- Table structure for table `tbl_borrowed_history`
 --
 
-CREATE TABLE `tbl_borrower` (
+CREATE TABLE `tbl_borrowed_history` (
   `id` int(11) NOT NULL,
-  `student_name` varchar(191) NOT NULL,
-  `section` enum('Stem A','Stem B','Stem C') DEFAULT NULL,
-  `qty` int(191) NOT NULL,
-  `borrowed_date` date DEFAULT NULL,
-  `return_date` date DEFAULT NULL,
-  `item_name` varchar(191) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `student_name` varchar(255) NOT NULL,
+  `section` enum('Stem A','Stem B','Stem C') NOT NULL,
+  `qty` int(11) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `approved_by` int(11) NOT NULL,
+  `borrowed_date` date NOT NULL,
+  `return_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_borrowed_items`
+--
+
+CREATE TABLE `tbl_borrowed_items` (
+  `id` int(11) NOT NULL,
+  `student_name` varchar(255) NOT NULL,
+  `section` enum('Stem A','Stem B','Stem C') NOT NULL,
+  `borrowed_date` date NOT NULL,
+  `return_date` date NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `status` enum('returned','not_return') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -57,9 +74,9 @@ CREATE TABLE `tbl_items` (
 --
 
 INSERT INTO `tbl_items` (`id`, `item_name`, `image`, `stock`, `created_at`) VALUES
-(7, 'Test Tubes', '1740925278.png', 9, '2025-03-01 15:15:14'),
-(11, 'Laboratory Spatula', '1740924403.png', 22, '2025-03-02 14:06:43'),
-(12, 'Laboratory Gown', '1740924426.png', 10, '2025-03-02 14:07:06');
+(7, 'Test Tubes', '1740925278.png', 10, '2025-03-01 15:15:14'),
+(11, 'Laboratory Spatula', '1740924403.png', 10, '2025-03-02 14:06:43'),
+(12, 'Laboratory Gown', '1740924426.png', 5, '2025-03-02 14:07:06');
 
 -- --------------------------------------------------------
 
@@ -117,9 +134,16 @@ INSERT INTO `tbl_users` (`id`, `name`, `email`, `password`, `reset_token`, `rese
 --
 
 --
--- Indexes for table `tbl_borrower`
+-- Indexes for table `tbl_borrowed_history`
 --
-ALTER TABLE `tbl_borrower`
+ALTER TABLE `tbl_borrowed_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `approved_by` (`approved_by`);
+
+--
+-- Indexes for table `tbl_borrowed_items`
+--
+ALTER TABLE `tbl_borrowed_items`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -146,10 +170,16 @@ ALTER TABLE `tbl_users`
 --
 
 --
--- AUTO_INCREMENT for table `tbl_borrower`
+-- AUTO_INCREMENT for table `tbl_borrowed_history`
 --
-ALTER TABLE `tbl_borrower`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_borrowed_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `tbl_borrowed_items`
+--
+ALTER TABLE `tbl_borrowed_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `tbl_items`
@@ -172,6 +202,12 @@ ALTER TABLE `tbl_users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `tbl_borrowed_history`
+--
+ALTER TABLE `tbl_borrowed_history`
+  ADD CONSTRAINT `tbl_borrowed_history_ibfk_1` FOREIGN KEY (`approved_by`) REFERENCES `tbl_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_schedules`

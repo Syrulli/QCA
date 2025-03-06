@@ -31,8 +31,43 @@ $(document).on('click', '.delete_item_btn', function (e) {
   });
 });
 
-/*==================== FUNC FOR APPOINTMENT PROCESS ====================*/
+$(document).on('click', '.approve_item_btn', function (e) {
+  e.preventDefault();
+  var approveItemId = $(this).data('id');
 
+  swal({
+    title: 'Approve Item?',
+    text: 'Are you sure you want to approve this returned item?',
+    icon: 'info',
+    buttons: true,
+    dangerMode: false,
+  }).then((willApprove) => {
+    if (willApprove) {
+      $.ajax({
+        type: 'POST',
+        url: 'return_item.php',
+        data: { id: approveItemId, action: 'approve' },
+        dataType: 'json',
+        success: function (response) {
+          if (response.status === 'success') {
+            swal('Success!', response.message, 'success').then(() => {
+              setTimeout(() => {
+                location.reload();
+              }, 2000);
+            });
+          } else {
+            swal('Error!', response.message, 'error');
+          }
+        },
+        error: function () {
+          swal('Error!', 'Something went wrong. Please try again.', 'error');
+        },
+      });
+    }
+  });
+});
+
+/*==================== FUNC FOR BORROWING PROCESS ====================*/
 $(document).ready(function () {
   function validateForm(formId) {
     var isValid = true;

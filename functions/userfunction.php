@@ -1,8 +1,8 @@
 <?php
     include('config/dbcon.php');
-    function getAllAvailableItems($tbl_items){
+    function getAllAvailableItems(){
         global $con;
-        $q = "SELECT * FROM $tbl_items";
+        $q = "SELECT * FROM tbl_items WHERE stock > 0"; 
         return $q = mysqli_query($con, $q);
     }
 

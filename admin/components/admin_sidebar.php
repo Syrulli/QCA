@@ -7,7 +7,7 @@ $page = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], "/") + 
             <div class="nav">
                 <div class="sb-sidenav-menu-heading">Dashboard</div>
 
-                <a class="nav-link text-white" <?= $page == "index.php" ? 'active bg-primary' : ''; ?> href="index.php.php">
+                <a class="nav-link text-white" <?= $page == "index.php" ? 'active bg-primary' : ''; ?> href="index.php">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-gauge"></i></div>
                     <small style="font-size: smaller;">Overview</small>
                 </a>
@@ -21,7 +21,6 @@ $page = substr($_SERVER['SCRIPT_NAME'], strrpos($_SERVER['SCRIPT_NAME'], "/") + 
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-warehouse"></i></div>
                     <small style="font-size: smaller;">Inventory</small>
                 </a>
-
 
                 <a class="nav-link text-white" <?= $page == "borrowed_history.php" ? 'active bg-primary' : ''; ?> href="borrowed_history.php">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
