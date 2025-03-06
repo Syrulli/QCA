@@ -37,7 +37,7 @@ $(document).on('click', '.approve_item_btn', function (e) {
 
   swal({
     title: 'Approve Item?',
-    text: 'Are you sure you want to approve this returned item?',
+    text: 'Are you sure you want to approve this item?',
     icon: 'info',
     buttons: true,
     dangerMode: false,
