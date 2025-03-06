@@ -34,13 +34,12 @@ $(document).on('click', '.delete_item_btn', function (e) {
 $(document).on('click', '.approve_item_btn', function (e) {
   e.preventDefault();
   var approveItemId = $(this).data('id');
-
   swal({
     title: 'Approve Item?',
     text: 'Are you sure you want to approve this item?',
-    icon: 'info',
+    icon: 'warning', 
     buttons: true,
-    dangerMode: false,
+    dangerMode: true,
   }).then((willApprove) => {
     if (willApprove) {
       $.ajax({
