@@ -31,35 +31,69 @@ $(document).on('click', '.delete_item_btn', function (e) {
   });
 });
 
+// $(document).on('click', '.approve_item_btn', function (e) {
+//   e.preventDefault();
+//   var approveItemId = $(this).data('id');
+//   swal({
+//     title: 'Approve Item?',
+//     text: 'Are you sure you want to approve this item?',
+//     icon: 'warning', 
+//     buttons: true,
+//     dangerMode: true,
+//   }).then((willApprove) => {
+//     if (willApprove) {
+//       $.ajax({
+//         type: 'POST',
+//         url: 'return_item.php',
+//         data: { id: approveItemId, action: 'approve' },
+//         dataType: 'json',
+//         success: function (response) {
+//           if (response.status === 'success') {
+//             swal('Success!', response.message, 'success').then(() => {
+//               setTimeout(() => {
+//                 location.reload();
+//               }, 2000); // reload
+//             });
+//           } else {
+//             swal('Error!', response.message, 'error');
+//           }
+//         },
+//         error: function () {
+//           swal('Error!', 'Something went wrong. Please try again.', 'error');
+//         },
+//       });
+//     }
+//   });
+// });
+
+
 $(document).on('click', '.approve_item_btn', function (e) {
   e.preventDefault();
-  var approveItemId = $(this).data('id');
+  var approveItemId = $(this).attr('value');
   swal({
     title: 'Approve Item?',
     text: 'Are you sure you want to approve this item?',
-    icon: 'warning', 
+    icon: 'warning',
     buttons: true,
     dangerMode: true,
-  }).then((willApprove) => {
-    if (willApprove) {
+  }).then((willDelete) => {
+    if (willDelete) {
       $.ajax({
         type: 'POST',
         url: 'return_item.php',
-        data: { id: approveItemId, action: 'approve' },
-        dataType: 'json',
-        success: function (response) {
-          if (response.status === 'success') {
-            swal('Success!', response.message, 'success').then(() => {
-              setTimeout(() => {
-                location.reload();
-              }, 2000); // reload
-            });
-          } else {
-            swal('Error!', response.message, 'error');
-          }
+        data: {
+          approve_item_btn: true,
+          return_item_table: approveItemId,
         },
-        error: function () {
-          swal('Error!', 'Something went wrong. Please try again.', 'error');
+        success: function (response) {
+          if (response == 200) {
+            swal('Success!', 'Item Deleted Successfully!', 'success');
+            $('#return_item_table').load(location.href + ' #return_item_table');
+          } else if (response == 404) {
+            swal('Error!', 'Tagged tool not found', 'error');
+          } else {
+            swal('Error!', 'Something went wrong', 'error');
+          }
         },
       });
     }

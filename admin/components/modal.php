@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <form id="scheduleForm">
-          <input type="hidden" name="modal_add_sched" value="<?= $sched['id'] ?>">
+          <input type="hidden" name="modafl_add_sched" value="<?= $sched['id'] ?>">
 
           <div class="row">
             <div class="col-lg-12">
