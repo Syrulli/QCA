@@ -9,7 +9,6 @@ if (isset($_POST['reset_password_btn'])) {
   $confirm_password = mysqli_real_escape_string($con, $_POST['confirm_password']);
 
   if ($new_password === $confirm_password) {
-    // Check if the token is valid and not expired
     $query = "SELECT reset_token_expire FROM tbl_users WHERE email=? AND reset_token=?";
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, "ss", $email, $token);
@@ -19,7 +18,7 @@ if (isset($_POST['reset_password_btn'])) {
 
     if ($row) {
       $reset_token_expire = $row['reset_token_expire'];
-      if (strtotime($reset_token_expire) > time()) { // Token is still valid
+      if (strtotime($reset_token_expire) > time()) { 
         // Hash the new password
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 

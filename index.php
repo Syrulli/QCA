@@ -2,7 +2,6 @@
 $title = "Quezon City Academy";
 include('functions/userfunction.php');
 include('./includes/header.php');
-include('email.php');
 ?>
 
 <section style="background-image: url('img/dummy_img_1.png') !important; background-repeat: no-repeat; background-position: center !important; background-size: cover; background-attachment: fixed;">
