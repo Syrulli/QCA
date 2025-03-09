@@ -33,7 +33,7 @@ if (isset($_POST['forgot_password_btn'])) {
         if ($update_query_run) {
             $reset_link = "http://localhost/QCA/reset_password.php?token=$token&email=$email"; // FOR LOCAL 
 
-        //    $reset_link = " https://qca.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
+           // $reset_link = " https://kvdentalclinic.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
            
             $mail = new PHPMailer(true);
             try {
@@ -47,7 +47,7 @@ if (isset($_POST['forgot_password_btn'])) {
                 $mail->Port       = 587;
 
                 // Recipients
-                $mail->setFrom('', 'Quezon City Academy');
+                $mail->setFrom('andremanebo@gmail.com', 'Quezon City Academy');
                 $mail->addAddress($email);
 
                 // Content
