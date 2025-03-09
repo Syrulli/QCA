@@ -31,9 +31,9 @@ if (isset($_POST['forgot_password_btn'])) {
         $update_query_run = mysqli_stmt_execute($stmt);
 
         if ($update_query_run) {
-            $reset_link = "http://localhost/QCA/reset_password.php?token=$token&email=$email"; // FOR LOCAL 
+            // $reset_link = "http://localhost/QCA/reset_password.php?token=$token&email=$email"; // FOR LOCAL 
 
-           // $reset_link = " https://kvdentalclinic.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
+           $reset_link = " https://qca.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
            
             $mail = new PHPMailer(true);
             try {
