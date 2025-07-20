@@ -31,9 +31,9 @@ if (isset($_POST['forgot_password_btn'])) {
         $update_query_run = mysqli_stmt_execute($stmt);
 
         if ($update_query_run) {
-            // $reset_link = "http://localhost/QCA/reset_password.php?token=$token&email=$email"; // FOR LOCAL 
+            $reset_link = "http://localhost/QCA/reset_password.php?token=$token&email=$email"; // FOR LOCAL 
 
-           $reset_link = " https://qca.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
+        //    $reset_link = " https://qca.online/reset_password.php?token=$token&email=$email"; // FOR HOSTED
            
             $mail = new PHPMailer(true);
             try {
@@ -41,13 +41,13 @@ if (isset($_POST['forgot_password_btn'])) {
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
-                $mail->Username   = 'andremanebo@gmail.com';
-                $mail->Password   = 'zjkv qvud savy hmmj'; 
+                $mail->Username   = 'lloydlanguido@gmail.com';
+                $mail->Password   = 'jkqv euzl weef fsui'; 
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port       = 587;
 
                 // Recipients
-                $mail->setFrom('andremanebo@gmail.com', 'Quezon City Academy');
+                $mail->setFrom('lloydlanguido@gmail.com', 'Quezon City Academy');
                 $mail->addAddress($email);
 
                 // Content

@@ -19,7 +19,6 @@ if (isset($_POST['reset_password_btn'])) {
     if ($row) {
       $reset_token_expire = $row['reset_token_expire'];
       if (strtotime($reset_token_expire) > time()) { 
-        // Hash the new password
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
         $update_query = "UPDATE tbl_users SET password=?, reset_token=NULL, reset_token_expire=NULL WHERE email=? AND reset_token=?";

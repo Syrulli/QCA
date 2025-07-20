@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_id = intval($_POST['item']);
     $qty = intval($_POST['qty']);
 
-    // Get current stock
     $query = "SELECT stock FROM tbl_items WHERE id = $item_id";
     $result = mysqli_query($con, $query);
 
@@ -21,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $insertQuery = "INSERT INTO tbl_borrowed_items (student_name, section, borrowed_date, return_date, item_name, qty) 
                             VALUES ('$student_name', '$section', '$borrowed_date', '$return_date', '$item_id', '$qty')";
             if (mysqli_query($con, $insertQuery)) {
-                // Deduct quantity from stock
                 $new_stock = $current_stock - $qty;
                 $updateStockQuery = "UPDATE tbl_items SET stock = $new_stock WHERE id = $item_id";
                 if (mysqli_query($con, $updateStockQuery)) {

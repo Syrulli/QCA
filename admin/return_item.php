@@ -1,13 +1,12 @@
 <?php
-header('Content-Type: application/json'); // Ensure JSON response
-session_start(); // Ensure session is started
-include '../config/dbcon.php'; 
+header('Content-Type: application/json');
+session_start();
+include '../config/dbcon.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $borrow_id = intval($_POST['id']);
-    $approved_by = $_SESSION['auth_user']['user_id']; // Get the logged-in user's ID
+    $approved_by = $_SESSION['auth_user']['user_id'];
 
-    // Fetch borrowed item details
     $query = "SELECT * FROM tbl_borrowed_items WHERE id = ?";
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, "i", $borrow_id);
@@ -20,10 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         $section = $row['section'];
         $borrowed_date = $row['borrowed_date'];
         $return_date = $row['return_date'];
-        $item_id = intval($row['item_name']); 
+        $item_id = intval($row['item_name']);
         $qty = intval($row['qty']);
 
-        // Fetch item stock
         $stockQuery = "SELECT stock FROM tbl_items WHERE id = ?";
         $stockStmt = mysqli_prepare($con, $stockQuery);
         mysqli_stmt_bind_param($stockStmt, "i", $item_id);
@@ -35,20 +33,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             $current_stock = intval($stockRow['stock']);
             $new_stock = $current_stock + $qty;
 
-            // Update stock
             $updateStockQuery = "UPDATE tbl_items SET stock = ? WHERE id = ?";
             $updateStockStmt = mysqli_prepare($con, $updateStockQuery);
             mysqli_stmt_bind_param($updateStockStmt, "ii", $new_stock, $item_id);
-            
+
             if (mysqli_stmt_execute($updateStockStmt)) {
-                // Insert into history with approved_by
                 $insertHistoryQuery = "INSERT INTO tbl_borrowed_history (student_name, section, borrowed_date, return_date, item_name, qty, approved_by) 
                                        VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $historyStmt = mysqli_prepare($con, $insertHistoryQuery);
                 mysqli_stmt_bind_param($historyStmt, "ssssiii", $student_name, $section, $borrowed_date, $return_date, $item_id, $qty, $approved_by);
 
                 if (mysqli_stmt_execute($historyStmt)) {
-                    // Delete from borrowed items
                     $deleteQuery = "DELETE FROM tbl_borrowed_items WHERE id = ?";
                     $deleteStmt = mysqli_prepare($con, $deleteQuery);
                     mysqli_stmt_bind_param($deleteStmt, "i", $borrow_id);
@@ -80,7 +75,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     echo json_encode(["status" => "error", "message" => "Invalid request."]);
     exit;
 }
-
-
 mysqli_close($con);
-?>
