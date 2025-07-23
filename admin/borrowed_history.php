@@ -1,5 +1,5 @@
 <?php
-$title = "Dashboard - History ";
+$title = "Borrowed History ";
 include('../middleware/admin_middleware.php');
 include('components/header.php');
 include('components/modal.php');
@@ -8,7 +8,7 @@ include('components/modal.php');
 <section>
     <div class="container-fluid px-4 mt-4" id="table_borrowed_history">
         <div class="row">
-            <h3 class="float-start"><span>Dashboard</span></h3>
+            <h3 class="float-start"><span>Borrowed History</span></h3>
             <hr>
         </div>
         <div class="row float-end mb-3">
