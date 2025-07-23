@@ -21,8 +21,8 @@ $schedules = [];
 $colors = [
     1 => "#FF5733", // User 1: Red-orange
     2 => "#33FF57", // User 2: Green
-    3 => "#3357FF", // User 3: Blue
-    4 => "#FF33A6", // User 4: Pink
+    53 => "#3357FF", // User 3: Blue
+    54 => "#FF33A6", // User 4: Pink
     5 => "#FFA533", // User 5: Orange
 ];
 
